@@ -13,16 +13,16 @@ urls_not_found = Counter("lynk_urls_not_found_total", "Total number of 404s")
 class ShortenRequest(BaseModel):
     url:str
 
-@router.get("/health")
-def health():
-    return {"status": "healthy"}
-
 @router.post("/shorten")
 def shorten(request:ShortenRequest):
     code=generate_code()
     set_url(code,request.url)
     urls_shortened.inc()
     return {"short_code":code,"short_url":f"http://localhost:8000/{code}"}
+
+@router.get("/health")
+def health():
+    return {"status": "healthy"}
 
 @router.get("/{code}")
 def redirect(code:str):

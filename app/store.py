@@ -5,7 +5,7 @@ import string
 r = redis.Redis(host="redis", port=6379, decode_responses=True)
 
 def generate_code(length=6):
-    return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
+    return ''.join(random.choices(string.ascii_lowercase + string.digits, k=length))
 
 def set_url(code: str, url: str):
     r.set(code, url)
