@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lynk
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: lynk
+  template:
+    metadata:
+      labels:
+        app: lynk
+    spec:
+      containers:
+      - name: lynk
+        image: tievenr/lynk:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: REDIS_HOST
+          value: "redis"
