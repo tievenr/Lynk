@@ -1,3 +1,4 @@
+import os
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
@@ -5,6 +6,7 @@ from prometheus_client import Counter
 from app.store import generate_code, set_url, get_url
 
 router = APIRouter()
+BASE_URL = os.getenv("BASE_URL", "http://localhost:8000")
 
 urls_shortened = Counter("lynk_urls_shortened_total", "Total number of URLs shortened")
 urls_redirected = Counter("lynk_urls_redirected_total", "Total number of redirects")
@@ -18,7 +20,7 @@ def shorten(request:ShortenRequest):
     code=generate_code()
     set_url(code,request.url)
     urls_shortened.inc()
-    return {"short_code":code,"short_url":f"http://localhost:8000/{code}"}
+    return {"short_code":code,"short_url":f"{BASE_URL}/{code}"}
 
 @router.get("/health")
 def health():
