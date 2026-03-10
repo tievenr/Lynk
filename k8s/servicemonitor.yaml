@@ -4,6 +4,7 @@ metadata:
   name: lynk
   labels:
     release: prometheus
+    prometheus: kube-prometheus
 spec:
   selector:
     matchLabels:
