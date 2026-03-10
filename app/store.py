@@ -1,14 +1,28 @@
 import redis 
 import random 
-import string 
+import string
+import os
 
-r = redis.Redis(host="redis", port=6379, decode_responses=True)
+try:
+    r = redis.Redis(
+        host=os.getenv("REDIS_HOST", "redis"),
+        port=6379,
+        decode_responses=True,
+        socket_connect_timeout=5
+    )
+    r.ping()
+except redis.ConnectionError:
+    print("WARNING: Redis not available")
+    r = None
 
 def generate_code(length=6):
     return ''.join(random.choices(string.ascii_lowercase + string.digits, k=length))
 
 def set_url(code: str, url: str):
-    r.set(code, url)
+    if r:
+        r.set(code, url)
 
 def get_url(code: str):
-    return r.get(code)
+    if r:
+        return r.get(code)
+    return None
