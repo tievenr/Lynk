@@ -11,12 +11,17 @@ spec:
     metadata:
       labels:
         app: lynk
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8000"
+        prometheus.io/path: "/metrics"
     spec:
       containers:
       - name: lynk
         image: tievenr/lynk:latest
         ports:
-        - containerPort: 8000
+        - name: metrics
+          containerPort: 8000
         env:
         - name: REDIS_HOST
           value: "redis"
